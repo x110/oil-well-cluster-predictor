@@ -1,14 +1,7 @@
-
-import random
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 from prophet import Prophet
 from scipy.signal import spectrogram
-
-import xgboost as xgb
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import classification_report, ConfusionMatrixDisplay
 
 def calculate_well_duration(df):
     """
