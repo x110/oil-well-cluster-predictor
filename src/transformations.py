@@ -3,16 +3,9 @@ import random
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import librosa
 from prophet import Prophet
-from librosa.core import stft, amplitude_to_db
 from scipy.signal import spectrogram
-from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.ensemble import IsolationForest
-from sklearn.model_selection import GridSearchCV
-from sklearn.pipeline import Pipeline
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
+
 import xgboost as xgb
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, ConfusionMatrixDisplay
