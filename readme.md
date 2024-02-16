@@ -2,8 +2,12 @@ Tasks List:
 - [ ] split the notebook into .py modules
     - [x] make_dataset.py
     - [x] train.py
-        -[ ] restructure the end points of train.py
-    - [ ] evaluation.py
+        -[x] restructure the end points of train.py
+    - [x] evaluation.py
+    - [ ] write predict.py including the preprocessing pipeline
+- [ ] add wandb
+- save model in a unique file path
+
 
 
 
