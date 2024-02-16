@@ -12,4 +12,4 @@ def encode_labels(y0):
     label_encoder = LabelEncoder()
     label_encoder.fit(class_labels)
     y = label_encoder.transform(y0)
-    return y
+    return y, class_labels

@@ -1,34 +1,46 @@
+import os
+import joblib
+import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
-from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
-import pandas as pd
-
 from preprocessing import preprocess_data, encode_labels
+import time
 
-def train_classifier(df_train, classifiers):
+def generate_unique_filename(prefix='file', extension='.pt'):
+    timestamp = time.strftime('%Y%m%d%H%M%S')
+    unique_filename = f"{prefix}_{timestamp}{extension}"
+    return unique_filename
+
+def train_classifier(df_train, classifiers, models_folder = './models'):
     X, y0 = preprocess_data(df_train)
-    y = encode_labels(y0)
+    y,class_labels = encode_labels(y0)
 
     for clf_name, clf_config in classifiers.items():
-        
         pipeline = Pipeline([
             ('preprocessor', StandardScaler()),
             ('clf', clf_config['model'])
         ])
 
         grid_search = GridSearchCV(pipeline,
-                               clf_config['params'],
-                               cv=5,
-                               scoring={'f1_weighted':'f1_weighted'},
-                               refit='f1_weighted',
-                               n_jobs=-1)
+                                   clf_config['params'],
+                                   cv=5,
+                                   scoring=['f1_weighted', 'balanced_accuracy'],
+                                   refit='f1_weighted',
+                                   n_jobs=-1)
         grid_search.fit(X, y)
-        print(f"Best parameters for {clf_name}: {grid_search.best_params_}")
-        print(f"Best score for {clf_name}: {grid_search.best_score_}")
+    best_model = grid_search.best_estimator_
+    best_score = grid_search.best_score_
+    print(f"Best parameters: {best_model}")
+    print(f"Best score : {best_score}")
+    model_filepath = os.path.join(models_folder, generate_unique_filename(prefix='model', extension='.pkl'))
+    joblib.dump((best_model, class_labels), model_filepath)
+    print(f"Best model is saved successfully at: {model_filepath}")
+
     return grid_search
 
-if __name__=="__main__":
+if __name__ == "__main__":
     processed_train_data_path = './dataset/processed/train.csv'
     df_train = pd.read_csv(processed_train_data_path)
     classifiers = {
@@ -41,4 +53,4 @@ if __name__=="__main__":
             },
         },
     }
-    train_classifier(df_train, classifiers)
+    grid_search = train_classifier(df_train, classifiers)

@@ -1,7 +1,8 @@
 Tasks List:
 - [ ] split the notebook into .py modules
     - [x] make_dataset.py
-    - [ ] train.py
+    - [x] train.py
+        -[ ] restructure the end points of train.py
     - [ ] evaluation.py
 
 
