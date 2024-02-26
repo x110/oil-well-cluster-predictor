@@ -1,6 +1,5 @@
 {
     "timeseries_file": "./dataset/raw/timeseries_data.csv",
     "well_file": "./dataset/raw/well_data.csv",
-    "merged_file": "./dataset/interm/merged_data.csv",
     "data_interm_path": "./dataset/interm"
 }

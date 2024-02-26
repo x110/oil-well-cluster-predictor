@@ -1,4 +1,3 @@
-Tasks List:
 - [ ] split the notebook into .py modules
     - [x] make_dataset.py
     - [x] train.py
@@ -7,7 +6,7 @@ Tasks List:
     - [x] write predict.py including the preprocessing pipeline
 - [ ] add wandb
 - [ ] save model in a unique file path
-- [ ] add gitignore
+- [x] add gitignore
 - [ ] install vs extension TODO
 - [ ] create a main file to run everything
 - [ ] link the play/debug button to the main file
