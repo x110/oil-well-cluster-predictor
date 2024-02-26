@@ -16,7 +16,7 @@ def load_and_merge_data(timeseries_file, well_file, output_file):
     return df_merged
 
 
-def create_train_test_split(data_file, target_column, output_dir="../dataset/interim", test_size=0.2, random_state=42, overwrite=False):
+def create_train_test_split(data_file, target_column, output_dir="../dataset/interm", test_size=0.2, random_state=42, overwrite=False):
     train_file = os.path.join(output_dir, "train.csv")
     test_file = os.path.join(output_dir, "test.csv")
     
@@ -26,7 +26,7 @@ def create_train_test_split(data_file, target_column, output_dir="../dataset/int
         return
     
     # Load merged DataFrame from file
-    df = pd.read_csv(data_file)
+    df = pd.read_csv(data_file, index_col=0)
     
     # Create output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
@@ -58,11 +58,11 @@ if __name__ == "__main__":
     merged_file = config["merged_file"]
     data_interm_path = config["data_interm_path"]
 
-    df_merged = load_and_merge_data(timeseries_file, well_file, merged_file)
-    print("Data loaded, merged, and saved successfully.")
-    print(df_merged.head())
+    #df_merged = load_and_merge_data(timeseries_file, well_file, merged_file)
+    #print("Data loaded, merged, and saved successfully.")
+    #print(df_merged.head())
     
-    create_train_test_split(data_file=merged_file,
+    create_train_test_split(data_file=well_file,
      target_column="cluster",
      output_dir=data_interm_path,
-     overwrite=False)
+     overwrite=True)

@@ -4,9 +4,14 @@ Tasks List:
     - [x] train.py
         -[x] restructure the end points of train.py
     - [x] evaluation.py
-    - [ ] write predict.py including the preprocessing pipeline
+    - [x] write predict.py including the preprocessing pipeline
 - [ ] add wandb
-- save model in a unique file path
+- [ ] save model in a unique file path
+- [ ] add gitignore
+- [ ] install vs extension TODO
+- [ ] create a main file to run everything
+- [ ] link the play/debug button to the main file
+
 
 
 
