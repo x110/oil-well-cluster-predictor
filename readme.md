@@ -12,6 +12,7 @@
     -[x] write it as a script
     - [x] split script into scripts
     - [x] write evaluation script
+    - [ ] write predict script 
 
 
 
@@ -20,7 +21,7 @@
 
 
 
-- [ ] merge scripts witj src?
+- [ ] merge scripts with src?
 - [ ] fix warning: cuments/ml-projects/oil-well-cluster-predictor/src/transformations.py:112: FutureWarning: DataFrame.fillna with 'method' is deprecated ...
 - [ ] add wandb
 - [ ] save model in a unique file path

@@ -29,10 +29,11 @@ def process_data(data_path, processed_data_path):
                 )
 
     df_freq_expanded = df_freq.filter(['freq','well']).pipe(tf.expand_column, column_name='freq')
-    df_freq = df_freq.drop(columns = {'date','value','cluster','study_end_date','study_start_date','freq'})
+    df_freq = df_freq.drop(columns = {'date','value','cluster','study_end_date','study_start_date','freq'}, errors='ignore')
     df_freq = df_freq.merge(df_freq_expanded, on='well')
 
     df = df.merge(df_freq, on='well')
+    df = df.drop_duplicates()
     df.to_csv(processed_data_path, index=False)
     return df
 
