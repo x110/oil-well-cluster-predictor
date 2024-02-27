@@ -1,13 +1,14 @@
 import joblib
 import pandas as pd
 from sklearn.metrics import classification_report, confusion_matrix
-from preprocessing import preprocess_data, encode_labels
+from preprocessing import encode_labels
 
-def evaluate_model(filepath, df_test):
+def evaluate_model(filepath, test_data_path):
     # Load the model and class names from the file
     model, class_names = joblib.load(filepath)
 
     # Extract features and labels from test data
+    df_test = pd.read_csv(test_data_path)
     y0_test = df_test['cluster']
     X_test = df_test.drop(columns={'cluster', 'well'})
     y_test, _ = encode_labels(y0_test)
@@ -26,11 +27,3 @@ def evaluate_model(filepath, df_test):
     # Print confusion matrix
     print("Confusion Matrix:")
     print(cm)
-
-if __name__ == "__main__":
-    processed_test_data_path = './dataset/processed/test.csv'
-    df_test = pd.read_csv(processed_test_data_path)
-    #todo pass name of the model , dont hard code it
-    filepath = './models/model_20240227083910.pkl'
-
-    evaluate_model(filepath, df_test)

@@ -1,5 +1,10 @@
 {
     "timeseries_file": "./dataset/raw/timeseries_data.csv",
     "well_file": "./dataset/raw/well_data.csv",
-    "data_interm_path": "./dataset/interm"
+    "data_interm_path": "./dataset/interm",
+    "train_data_path": "./dataset/interm/train.csv",
+    "processed_train_data_path": "./dataset/processed/train.csv",
+    "test_data_path": "./dataset/interm/test.csv",
+    "processed_test_data_path": "./dataset/processed/test.csv",
+    "model_path": "./models/model_20240227083910.pkl"
 }

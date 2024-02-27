@@ -1,3 +1,4 @@
 dataset/interm/*
+dataset/processed/*
 models/*
 myenv/
