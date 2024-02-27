@@ -31,6 +31,6 @@ if __name__ == "__main__":
     processed_test_data_path = './dataset/processed/test.csv'
     df_test = pd.read_csv(processed_test_data_path)
     #todo pass name of the model , dont hard code it
-    filepath = './models/model_20240226103200.pkl'
+    filepath = './models/model_20240227083910.pkl'
 
     evaluate_model(filepath, df_test)

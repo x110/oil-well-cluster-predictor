@@ -38,4 +38,4 @@ if __name__ == "__main__":
     timeseries_file = config["timeseries_file"]
     well_file = config["well_file"]
     interm_dir= config["data_interm_path"]
-    create_train_test_split(timeseries_file, well_file, output_dir=interm_dir, overwrite=False)
+    create_train_test_split(timeseries_file, well_file, output_dir=interm_dir, overwrite=True)
