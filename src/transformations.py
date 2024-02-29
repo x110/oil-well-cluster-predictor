@@ -107,9 +107,9 @@ def fill_missing_values(df, group_column='well', time_column='date'):
     # Define a function to fill missing values within each group
     def fill_missing(group):
         # Forward fill missing values within the group
-        group_filled = group.fillna(method='ffill')
+        group_filled = group.ffill()
         # Backward fill any remaining missing values
-        group_filled = group_filled.fillna(method='bfill')
+        group_filled = group_filled.bfill()
         return group_filled
     
     # Apply the fill_missing function to each group
