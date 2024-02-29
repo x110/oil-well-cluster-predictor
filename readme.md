@@ -96,21 +96,22 @@ Prediction results:
     - [x] write evaluation script
     - [x] write predict script
 - [x] fix warning: cuments/ml-projects/oil-well-cluster-predictor/src/transformations.py:112: FutureWarning: DataFrame.fillna with 'method' is deprecated ...
+- [x] save model in a unique file path
+- [ ] add error analysis:
+    - [x] confusion matrix
+    - [ ] find samples that are class a and classified as a, class a and classified as b, class b and classified as a and class b and classified as b
+    - inspect their plots
 
-- [ ] install as pip package to get rid of path append
-- [ ] merge scripts with src?
+    -[ ] inspect the samples that were wrongly classified
+
+- [ ] pass model path in evaluation script
 - [ ] add wandb
-- [ ] save model in a unique file path
-- [x] add gitignore
-- [x] install vs extension TODO
-- [x] create a main file to run everything
+- [ ] merge scripts with src?
+- [ ] install as pip package to get rid of path append
 - [ ] link the play/debug button to the main file
-- [ ] add the missing components to the code
-    - [x] config file
-    - [ ] error analysis
-    - [ ] APIs
-    - [ ] pytests
-- [ ] write test functions    
+- [ ] add error analysis
+- [ ] add APIs
+- [ ] ad pytests
 - [ ] EDA: Well card
 - [ ] Data audit
 - [ ] Solve using DL
