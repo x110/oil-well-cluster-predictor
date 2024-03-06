@@ -100,7 +100,8 @@ Prediction results:
 - [ ] add error analysis:
     - [x] confusion matrix
     - [ ] find samples that are class a and classified as a, class a and classified as b, class b and classified as a and class b and classified as b
-    - inspect their plots
+    - inspect their plots:
+        -[ ] create a 5x5 subplot
 
     -[ ] inspect the samples that were wrongly classified
 
