@@ -10,17 +10,10 @@ def main(config_file):
     with open(config_file, 'r') as f:
         config = json.load(f)
     train_data_path = config["train_data_path"]
-    processed_train_data_path = config["processed_train_data_path"]
-    test_data_path = config["test_data_path"]
-    processed_test_data_path = config["processed_test_data_path"]
+    df = pd.read_csv(train_data_path, parse_dates=['date'])
+    X = df.drop(columns='cluster')
+    y = df.cluster
 
-    # TODO: change to exists or overwrite?
-    try:
-        df_train = pd.read_csv(processed_train_data_path)
-        df_test = pd.read_csv(processed_test_data_path)
-    except:
-        df_train = process_data(train_data_path, processed_train_data_path)
-        df_test = process_data(test_data_path, processed_test_data_path)
 
     # Define classifiers and perform training
     classifiers = {
@@ -33,7 +26,7 @@ def main(config_file):
             },
         },
     }
-    grid_search = train_classifier(df_train, classifiers)
+    grid_search = train_classifier(X,y, classifiers)
     # TODO: log results of gridsearch
 
 
@@ -44,3 +37,4 @@ if __name__ == "__main__":
         sys.exit(1)
     config_file = sys.argv[1]
     main(config_file)
+

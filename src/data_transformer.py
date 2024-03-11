@@ -40,5 +40,6 @@ class CustomDataTransformer(BaseEstimator, TransformerMixin):
 
         df = df.merge(df_freq, on='well')
         df = df.drop_duplicates()
+        df = df.drop(columns={'well'})
         
         return df

@@ -99,12 +99,10 @@ Prediction results:
 - [x] save model in a unique file path
 - [ ] add error analysis:
     - [x] confusion matrix
-    - [ ] find samples that are class a and classified as a, class a and classified as b, class b and classified as a and class b and classified as b
+    - [x] find samples that are class a and classified as a, class a and classified as b, class b and classified as a and class b and classified as b
     - inspect their plots:
-        -[ ] create a 5x5 subplot
-
-    -[ ] inspect the samples that were wrongly classified
-
+        -[x] create a 5x5 subplot
+- [ ] encapsulate all trans in one pipeline: ||
 - [ ] pass model path in evaluation script
 - [ ] add wandb
 - [ ] merge scripts with src?
