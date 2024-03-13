@@ -8,7 +8,7 @@ def main(config_file):
     with open(config_file, 'r') as f:
         config = json.load(f)
 
-    test_data_path = config["processed_test_data_path"]
+    test_data_path = config["test_data_path"]
     model_path = config["model_path"]
     evaluate_model(model_path, test_data_path)
 

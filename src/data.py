@@ -31,6 +31,15 @@ def create_train_test_split(timeseries_file, well_file, output_dir= "./dataset/i
     print(f"Train and test datasets saved to '{train_file}' and '{test_file}'")
     return df_train, df_test
 
+def load_data(data_path):
+    df = (pd.read_csv(data_path)
+          .groupby('well',sort=False)
+          .agg({'cluster':'first','date':list,'value':list})
+          .reset_index()
+          )
+                
+    return df
+
 if __name__ == "__main__":
     config_file = "config.json"
     with open(config_file, 'r') as f:
