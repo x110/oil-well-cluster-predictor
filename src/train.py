@@ -9,7 +9,7 @@ from preprocessing import preprocess_data, encode_labels
 import time
 from data_transformer import CustomDataTransformer
 import json
-from train import load_data
+from data import load_data
 
 def generate_unique_filename(prefix='file', extension='.pt'):
     timestamp = time.strftime('%Y%m%d%H%M%S')
@@ -37,7 +37,10 @@ def train_classifier(X,y, classifiers, models_folder = './models'):
     best_score = grid_search.best_score_
     print(f"Best parameters: {best_model}")
     print(f"Best score : {best_score}")
-    model_filepath = os.path.join(models_folder, generate_unique_filename(prefix='model', extension='.pkl'))
+    #TODO: fix naming
+    #model_filepath = os.path.join(models_folder, generate_unique_filename(prefix='model', extension='.pkl'))
+    model_filepath = os.path.join(models_folder, 'model_bst.pkl')
+
     joblib.dump(best_model, model_filepath)
     print(f"Best model is saved successfully at: {model_filepath}")
 

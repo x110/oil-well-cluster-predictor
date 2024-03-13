@@ -3,8 +3,8 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 import sys
 sys.path.append('./src')
-from make_dataset import process_data
-from train import train_classifier, load_data
+from data import load_data
+from train import train_classifier
 
 def main(config_file):
     with open(config_file, 'r') as f:
