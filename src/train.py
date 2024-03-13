@@ -19,7 +19,7 @@ def train_classifier(X,y, classifiers, models_folder = './models'):
     for clf_name, clf_config in classifiers.items():
         pipeline = Pipeline([
             ('data_transformer', CustomDataTransformer()),
-            ('preprocessor', StandardScaler()),
+            #('preprocessor', StandardScaler()),
             ('clf', clf_config['model'])
         ])
 
@@ -42,16 +42,26 @@ def train_classifier(X,y, classifiers, models_folder = './models'):
     return grid_search
 
 if __name__ == "__main__":
-    processed_train_data_path = './dataset/processed/train.csv'
-    df_train = pd.read_csv(processed_train_data_path)
+
+    train_data_path = "./dataset/interm/train.csv"
+    
+    df_train = (pd.read_csv(train_data_path)
+                .groupby('well',sort=False)
+                .agg({'cluster':'first','date':list,'value':list})
+                .reset_index()
+                )
+    
+    y = df_train['cluster']
+    X = df_train.drop(columns={'cluster'})
+
     classifiers = {
-        'RandomForest': {
-            'model': RandomForestClassifier(),
-            'params': {
-                'clf__n_estimators': [100],
-                'clf__max_depth': [10],
-                'clf__class_weight': ['balanced']
-            },
+    'RandomForest': {
+        'model': RandomForestClassifier(),
+        'params': {
+            'clf__n_estimators': [100],
+            'clf__max_depth': [10],
+            'clf__class_weight': ['balanced']
         },
+    },
     }
-    grid_search = train_classifier(df_train, classifiers)
+    grid_search = train_classifier(X, y, classifiers)

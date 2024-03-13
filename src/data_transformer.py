@@ -13,11 +13,15 @@ class CustomDataTransformer(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X, y=None):
-        df = (X.pipe(tf.add_study_dates, years=self.years)
+        index = X.well.drop_duplicates().to_list()
+        
+        df = (X.explode(['date','value'])
+              .assign(date = lambda df: pd.to_datetime(df['date']))
+              .pipe(tf.add_study_dates, years=self.years)
               .pipe(tf.filter_date_range)
               .pipe(tf.create_date_range)
               .pipe(tf.fill_missing_values)
-              .pipe(tf.drop_mostly_zero_wells)
+              #.pipe(tf.drop_mostly_zero_wells)
               .assign(smoothed_value=lambda df: tf.smooth_dataframe(df, column='value', window=self.window))
               .pipe(tf.calculate_statistical_features, column='smoothed_value')
               .pipe(tf.add_months_elapsed)
@@ -25,13 +29,15 @@ class CustomDataTransformer(BaseEstimator, TransformerMixin):
               .drop_duplicates()
               )
         
-        df_freq = (X.pipe(tf.add_study_dates, years=self.years)
-                     .pipe(tf.filter_date_range)
-                     .pipe(tf.create_date_range)
-                     .pipe(tf.fill_missing_values)
-                     .pipe(tf.drop_mostly_zero_wells)
-                     .pipe(tf.calculate_dc_magnitude_wells)
-                     .pipe(tf.calculate_df_fft)
+        df_freq = (X.explode(['date','value'])
+                   .assign(date = lambda df: pd.to_datetime(df['date']))
+                   .pipe(tf.add_study_dates, years=self.years)
+                   .pipe(tf.filter_date_range)
+                   .pipe(tf.create_date_range)
+                   .pipe(tf.fill_missing_values)
+                   #.pipe(tf.drop_mostly_zero_wells)
+                   .pipe(tf.calculate_dc_magnitude_wells)
+                   .pipe(tf.calculate_df_fft)
                   )
         
         df_freq_expanded = df_freq.filter(['freq','well']).pipe(tf.expand_column, column_name='freq')
@@ -40,6 +46,7 @@ class CustomDataTransformer(BaseEstimator, TransformerMixin):
 
         df = df.merge(df_freq, on='well')
         df = df.drop_duplicates()
+        df['well'] = pd.Categorical(df['well'], categories=index, ordered=True)
+        df= df.sort_values(by='well')
         df = df.drop(columns={'well'})
-        
         return df
