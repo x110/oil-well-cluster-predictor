@@ -104,21 +104,21 @@ Prediction results:
         -[x] create a 5x5 subplot
 - [x] encapsulate all trans in one pipeline: ||||||
     - [x] bug fix: add the index as a colum so you can align X and y after processing X
+- [x] pass model path in evaluation script
 
-
-
-    
-- [ ] pass model path in evaluation script
 - [ ] add wandb
-- [ ] merge scripts with src?
-- [ ] install as pip package to get rid of path append
-- [ ] link the play/debug button to the main file
 - [ ] add error analysis
-- [ ] add APIs
-- [ ] ad pytests
 - [ ] EDA: Well card
 - [ ] Data audit
 - [ ] Solve using DL
 - [ ] Solve using ensemble/blending/stacking
+
+- [ ] add APIs
+- [ ] ad pytests
+- [ ] merge scripts with src?
+- [ ] install as pip package to get rid of path append
+- [ ] link the play/debug button to the main file
+
+
 Bonus:
 - [ ] Develop a gui and host it on github.io

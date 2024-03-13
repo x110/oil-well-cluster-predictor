@@ -5,16 +5,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
-from preprocessing import preprocess_data, encode_labels
 import time
 from data_transformer import CustomDataTransformer
-import json
 from data import load_data
-
-def generate_unique_filename(prefix='file', extension='.pt'):
-    timestamp = time.strftime('%Y%m%d%H%M%S')
-    unique_filename = f"{prefix}_{timestamp}{extension}"
-    return unique_filename
 
 def train_classifier(X,y, classifiers, models_folder = './models'):
 

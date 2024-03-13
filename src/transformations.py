@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from prophet import Prophet
 from scipy.signal import spectrogram
+pd.set_option('future.no_silent_downcasting', True)
 
 def calculate_well_duration(df):
     """
@@ -107,7 +108,7 @@ def fill_missing_values(df, group_column='well', time_column='date'):
     # Define a function to fill missing values within each group
     def fill_missing(group):
         # Forward fill missing values within the group
-        group_filled = group.ffill()
+        group_filled = group.infer_objects(copy=False).ffill()
         # Backward fill any remaining missing values
         group_filled = group_filled.bfill()
         return group_filled
@@ -349,7 +350,7 @@ def calculate_fft(signal,ratio=True):
     magnitude_spectrum = np.abs(fft_result)[:N//2]
     max_magnitude = np.max(magnitude_spectrum)
     if ratio:
-        magnitude_spectrum = magnitude_spectrum/max_magnitude
+        magnitude_spectrum = magnitude_spectrum/(max_magnitude+1e-12)
     return magnitude_spectrum[:10]
 def calculate_df_fft(df, column='value'):
     magnitude_spectrum = df.groupby('well').apply(lambda group: calculate_fft(group[column])).reset_index(level=0)
