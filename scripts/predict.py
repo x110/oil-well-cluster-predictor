@@ -4,29 +4,20 @@ import argparse
 import json
 import pandas as pd
 import joblib
-from make_dataset import process_data
+from data import load_data
 
 def predict(config_file, new_data_path):
-    # Load configuration from JSON file
     with open(config_file, 'r') as f:
         config = json.load(f)
 
-    # Define paths
     model_path = config['model_path']
 
-    # Load the model and class names
-    model, class_names = joblib.load(model_path)
+    model = joblib.load(model_path)
 
-    # Process the new data
-    # TODO: Remove 'outputdir' from process_data function
-    # TODO: Maybe include process_data in sklearn pipeline
-    X = process_data(new_data_path, 'del.csv').set_index('well')
+    X = load_data(new_data_path)
 
-    # Make predictions
-    y_pred = model.predict(X)
+    preds = model.predict(X)
 
-    # Map predictions to class names
-    preds = {well: class_names[pred] for pred, well in zip(y_pred, X.index)}
     return preds
 
 if __name__ == "__main__":

@@ -32,11 +32,19 @@ def create_train_test_split(timeseries_file, well_file, output_dir= "./dataset/i
     return df_train, df_test
 
 def load_data(data_path):
-    df = (pd.read_csv(data_path)
-          .groupby('well',sort=False)
-          .agg({'cluster':'first','date':list,'value':list})
-          .reset_index()
-          )
+    df = pd.read_csv(data_path)
+    if 'cluster' in df.columns:
+        df = (df
+              .groupby('well',sort=False)
+              .agg({'cluster':'first','date':list,'value':list})
+              .reset_index()
+              )
+    else:
+        df = (df
+              .groupby('well',sort=False)
+              .agg({'date':list,'value':list})
+              .reset_index()
+              )
                 
     return df
 
