@@ -4,13 +4,15 @@ from sklearn.ensemble import RandomForestClassifier
 import sys
 sys.path.append('./src')
 from make_dataset import process_data
-from train import train_classifier
+from train import train_classifier, load_data
 
 def main(config_file):
     with open(config_file, 'r') as f:
         config = json.load(f)
+
     train_data_path = config["train_data_path"]
-    df = pd.read_csv(train_data_path, parse_dates=['date'])
+    df = load_data(train_data_path)
+    
     X = df.drop(columns='cluster')
     y = df.cluster
 
