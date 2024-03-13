@@ -8,6 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 from preprocessing import preprocess_data, encode_labels
 import time
 from data_transformer import CustomDataTransformer
+import json
 
 def generate_unique_filename(prefix='file', extension='.pt'):
     timestamp = time.strftime('%Y%m%d%H%M%S')
@@ -19,7 +20,7 @@ def train_classifier(X,y, classifiers, models_folder = './models'):
     for clf_name, clf_config in classifiers.items():
         pipeline = Pipeline([
             ('data_transformer', CustomDataTransformer()),
-            #('preprocessor', StandardScaler()),
+            ('preprocessor', StandardScaler()),
             ('clf', clf_config['model'])
         ])
 
@@ -41,18 +42,23 @@ def train_classifier(X,y, classifiers, models_folder = './models'):
 
     return grid_search
 
+def load_data(data_path):
+    df = (pd.read_csv(data_path)
+          .groupby('well',sort=False)
+          .agg({'cluster':'first','date':list,'value':list})
+          .reset_index()
+          )
+                
+    return df
+
 if __name__ == "__main__":
 
     train_data_path = "./dataset/interm/train.csv"
+
+    df_train = load_data(train_data_path)
     
-    df_train = (pd.read_csv(train_data_path)
-                .groupby('well',sort=False)
-                .agg({'cluster':'first','date':list,'value':list})
-                .reset_index()
-                )
-    
-    y = df_train['cluster']
     X = df_train.drop(columns={'cluster'})
+    y = df_train['cluster']
 
     classifiers = {
     'RandomForest': {
