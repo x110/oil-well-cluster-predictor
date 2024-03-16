@@ -1,6 +1,30 @@
-** The objective is to develop a boilerplate for image classification problems where the whole workflow and  pipelines is implemented. This will serve as a jumpboard to build classification applications faster and also provides a unified framework to takle such problems aiding in maintainability**
+# Oil Well Cluster Predictor
+## Overview
+This project aims to predict the cluster affiliation of oil wells based on time series production metrics using machine learning and deep learning  techniques. The dataset consists of two main files: `timeseries_data.csv` containing the time series production metrics of various wells, and `well_data.csv` containing the cluster grouping of each well.
+## Project Structure
+* `dataset/`: 
+    * `raw/`: Contains the raw input data files, including timeseries_data.csv and well_data.csv.
+    * `interm/`: Holds intermediate data files, including the indices of the train and test samples used in the project.
+* `models/`: Directory containing the input data files.
+* `notebooks/`: Jupyter notebooks for project demo, exploratory data analysis (EDA), and error analysis. 
+* `scripts/`: Scripts for various project tasks, such as train/test split, model training, evaluation, and prediction.
+* `src/`:  Source code files are organized in this directory, including modules for data preprocessing, feature engineering, model training, and evaluation.
 
-## Model Training and Evaluation
+## Setup Instructions
+
+1. **Download and Unzip:**
+* Download the project zip file
+* Extract the contents to your local machine
+```bash
+unzip well-cluster-prediction.zip
+cd well-cluster-prediction
+
+```
+2. **Install Dependencies**
+* Install the required Python dependencies:
+```bash
+    pip install -r requirements.txt
+```
 
 This section outlines the process of training and evaluating a machine learning model for the oil well cluster predictor project.
 
@@ -122,7 +146,7 @@ Prediction results:
 - [ ] install as pip package to get rid of path append
 - [ ] link the play/debug button to the main file
 - [ ] repeat on a different dataset
-
+- create a run_all.py script
 
 
 Bonus:
