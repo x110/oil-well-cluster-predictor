@@ -81,7 +81,6 @@ Prediction results:
 
 
 ## Tasks
-
 - [x] split the notebook into .py modules
     - [x] make_dataset.py
     - [x] train.py
@@ -105,19 +104,24 @@ Prediction results:
 - [x] encapsulate all trans in one pipeline: ||||||
     - [x] bug fix: add the index as a colum so you can align X and y after processing X
 - [x] pass model path in evaluation script
-
+- [ ] update readme
+- [ ] modify gridsearchcv to iterate over pipelines
 - [ ] add wandb
-- [ ] add error analysis
-- [ ] EDA: Well card
 - [ ] Data audit
+- [ ] EDA: Well card
+- [ ] add samples removal cleanup methods
+- [ ] add error analysis
 - [ ] Solve using DL
 - [ ] Solve using ensemble/blending/stacking
+- [ ] solve it as a clustering problem
 
 - [ ] add APIs
 - [ ] ad pytests
 - [ ] merge scripts with src?
 - [ ] install as pip package to get rid of path append
 - [ ] link the play/debug button to the main file
+- [ ] repeat on a different dataset
+
 
 
 Bonus:

@@ -12,12 +12,11 @@ def main(config_file):
 
     train_data_path = config["train_data_path"]
     df = load_data(train_data_path)
+    # TODO: Data cleanup
     
     X = df.drop(columns='cluster')
     y = df.cluster
 
-
-    # Define classifiers and perform training
     classifiers = {
         'RandomForest': {
             'model': RandomForestClassifier(),
