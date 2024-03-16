@@ -11,10 +11,9 @@ def main(config_file):
     well_file = config["well_file"]
     interm_dir = config["data_interm_path"]
 
-    create_train_test_split(timeseries_file, well_file, output_dir=interm_dir, overwrite=True)
+    create_train_test_split(timeseries_file, well_file, output_dir=interm_dir, overwrite=False)
 
 if __name__ == "__main__":
-    # Get configuration file path from command line argument
     if len(sys.argv) != 2:
         print("Usage: python script.py <config_file>")
         sys.exit(1)

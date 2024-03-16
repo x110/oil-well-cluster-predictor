@@ -106,6 +106,7 @@ Prediction results:
 - [x] pass model path in evaluation script
 - [ ] update readme
 - [ ] modify gridsearchcv to iterate over pipelines
+- [ ] plot learning curves pg.133
 - [ ] add wandb
 - [ ] Data audit
 - [ ] EDA: Well card
