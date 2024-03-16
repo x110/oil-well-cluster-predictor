@@ -21,7 +21,7 @@ def train_classifier(X,y, classifiers, models_folder = './models'):
         grid_search = GridSearchCV(pipeline,
                                    clf_config['params'],
                                    cv=5,
-                                   scoring=['f1_weighted', 'balanced_accuracy'],
+                                   scoring=['precision_weighted','recall_weighted','f1_weighted', 'balanced_accuracy'],
                                    refit='f1_weighted',
                                    n_jobs=-1,
                                    error_score='raise')
