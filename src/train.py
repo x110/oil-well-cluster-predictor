@@ -4,13 +4,18 @@ import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
+import wandb
 from data_transformer import CustomDataTransformer
 from data import load_data
 
 def train_classifier(X,y, classifiers, models_folder = './models'):
 
     for clf_name, clf_config in classifiers.items():
+        params = clf_config.update({'clf_name':clf_name})
+
+        wandb.init(project="oil-well-cluster-predictor",config=params)
+        
         pipeline = Pipeline([
             ('data_transformer', CustomDataTransformer()),
             ('preprocessor', StandardScaler()),
@@ -23,10 +28,13 @@ def train_classifier(X,y, classifiers, models_folder = './models'):
                                    scoring=['precision_weighted','recall_weighted','f1_weighted', 'balanced_accuracy'],
                                    refit='f1_weighted',
                                    n_jobs=-1,
+                                   #return_train_score=True,
                                    error_score='raise')
         grid_search.fit(X, y)
         best_model = grid_search.best_estimator_
         best_score = grid_search.best_score_
+        results = pd.DataFrame(grid_search.cv_results_).filter(regex="^mean_test").iloc[grid_search.best_index_].to_dict()
+        wandb.log(results)
         print(f"Best parameters for {clf_name}: {best_model}")
         print(f"Best score for {clf_name}: {best_score}")
     #TODO: fix naming

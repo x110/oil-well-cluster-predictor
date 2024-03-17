@@ -1,14 +1,11 @@
 import json
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 import sys
-import wandb
 sys.path.append('./src')
 from data import load_data
 from train import train_classifier
 
 def main(config_file):
-
-    wandb.init(project="oil-well-cluster-predictor")
 
     with open(config_file, 'r') as f:
         config = json.load(f)
@@ -21,14 +18,6 @@ def main(config_file):
     y = df.cluster
 
     classifiers = {
-        'RandomForest': {
-            'model': RandomForestClassifier(),
-            'params': {
-                'clf__n_estimators': [500],
-                'clf__max_depth': [16],
-                'clf__class_weight': ['balanced']
-            },
-        },
         'GradientBoosting': {
             'model': GradientBoostingClassifier(),
             'params': {
@@ -46,9 +35,6 @@ def main(config_file):
     }
 
     grid_search = train_classifier(X,y, classifiers)
-    wandb.log({"Best Score": grid_search.best_score_,
-               "Best Parameters": grid_search.best_params_})
-
 
 if __name__ == "__main__":
     # Get configuration file path from command line argument
