@@ -4,8 +4,7 @@ import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestClassifier
-import time
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from data_transformer import CustomDataTransformer
 from data import load_data
 
@@ -26,10 +25,10 @@ def train_classifier(X,y, classifiers, models_folder = './models'):
                                    n_jobs=-1,
                                    error_score='raise')
         grid_search.fit(X, y)
-    best_model = grid_search.best_estimator_
-    best_score = grid_search.best_score_
-    print(f"Best parameters: {best_model}")
-    print(f"Best score : {best_score}")
+        best_model = grid_search.best_estimator_
+        best_score = grid_search.best_score_
+        print(f"Best parameters for {clf_name}: {best_model}")
+        print(f"Best score for {clf_name}: {best_score}")
     #TODO: fix naming
     #model_filepath = os.path.join(models_folder, generate_unique_filename(prefix='model', extension='.pkl'))
     model_filepath = os.path.join(models_folder, 'model_bst.pkl')

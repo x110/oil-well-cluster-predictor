@@ -1,8 +1,5 @@
 import json
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn.linear_model import LogisticRegression
-from xgboost import XGBClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 import sys
 import wandb
 sys.path.append('./src')
@@ -27,53 +24,28 @@ def main(config_file):
         'RandomForest': {
             'model': RandomForestClassifier(),
             'params': {
-                'clf__n_estimators': [100, 200, 300],
-                'clf__max_depth': [3, 6, 9, None],
-                'clf__min_samples_split': [2, 5, 10],
-                'clf__min_samples_leaf': [1, 2, 4],
-                'clf__bootstrap': [True, False],
-                'clf__class_weight': [None, 'balanced']
+                'clf__n_estimators': [500],
+                'clf__max_depth': [16],
+                'clf__class_weight': ['balanced']
             },
         },
-        'SVM': {
-            'model': SVC(),
+        'GradientBoosting': {
+            'model': GradientBoostingClassifier(),
             'params': {
-                'clf__C': [0.1, 1, 10, 100],
-                'clf__kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
-                'clf__gamma': ['scale', 'auto'],
-                'clf__class_weight': [None, 'balanced']
-            },
-        },
-        'LogisticRegression': {
-            'model': LogisticRegression(),
-            'params': {
-                'clf__C': [0.1, 1, 10, 100],
-                'clf__penalty': ['l1', 'l2', 'elasticnet', 'none'],
-                'clf__solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'],
-                'clf__class_weight': [None, 'balanced']
-            },
-        },
-        'XGBoost': {
-            'model': XGBClassifier(),
-            'params': {
-                'clf__n_estimators': [100, 200, 300],
-                'clf__max_depth': [3, 6, 9],
-                'clf__learning_rate': [0.01, 0.1, 0.3],
-                'clf__subsample': [0.6, 0.8, 1.0],
-                'clf__colsample_bytree': [0.6, 0.8, 1.0],
-                'clf__reg_alpha': [1e-3, 1e-2, 0.1, 1, 10],
-                'clf__reg_lambda': [1e-3, 1e-2, 0.1, 1, 10],
-                'clf__scale_pos_weight': [1],
-                'clf__objective': ['binary:logistic']
+                'clf__n_estimators': [100],
+                'clf__learning_rate': [0.1],
+                'clf__max_depth': [3],
+                'clf__min_samples_split': [2],
+                'clf__min_samples_leaf': [1],
+                'clf__subsample': [1.0],
+                'clf__max_features': [None],
+                'clf__random_state': [None]
             }
         }
+
     }
 
-
-
-
     grid_search = train_classifier(X,y, classifiers)
-    # TODO: log results of gridsearch
     wandb.log({"Best Score": grid_search.best_score_,
                "Best Parameters": grid_search.best_params_})
 
@@ -85,9 +57,4 @@ if __name__ == "__main__":
         sys.exit(1)
     config_file = sys.argv[1]
     main(config_file)
-
-#200 min
-#6 giga
-#16 giga,
-#125 dhs (6 months)
 
