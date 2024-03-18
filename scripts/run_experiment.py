@@ -1,9 +1,16 @@
 import json
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+import wandb
+import os
+import joblib
+import pandas as pd
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.preprocessing import StandardScaler
 import sys
 sys.path.append('./src')
 from data import load_data
-from train import train_classifier
+from data_transformer import CustomDataTransformer
 
 def main(config_file):
 
@@ -17,24 +24,44 @@ def main(config_file):
     X = df.drop(columns='cluster')
     y = df.cluster
 
-    classifiers = {
-        'GradientBoosting': {
-            'model': GradientBoostingClassifier(),
-            'params': {
-                'clf__n_estimators': [100],
-                'clf__learning_rate': [0.1],
-                'clf__max_depth': [3],
-                'clf__min_samples_split': [2],
-                'clf__min_samples_leaf': [1],
-                'clf__subsample': [1.0],
-                'clf__max_features': [None],
-                'clf__random_state': [None]
-            }
-        }
+    clf = Pipeline([
+            ('data_transformer', CustomDataTransformer()),
+            ('preprocessor', StandardScaler()),
+            ('gbc', GradientBoostingClassifier())
+        ])
+    
+    param_grid = [{
+                'gbc__n_estimators': [100],
+                'gbc__learning_rate': [0.1],
+                'gbc__max_depth': [3],
+                'gbc__min_samples_split': [2],
+                'gbc__min_samples_leaf': [1],
+                'gbc__subsample': [1.0],
+            }]
+    
+    grid_search = GridSearchCV(clf,
+                               param_grid,
+                               cv=5,
+                               scoring=['precision_weighted','recall_weighted','f1_weighted', 'balanced_accuracy'],
+                               refit='f1_weighted',
+                               n_jobs=-1,
+                               return_train_score=False,
+                               error_score='raise')
+    
+    grid_search.fit(X, y)
+    print(grid_search.best_params_)
+    best_model = grid_search.best_estimator_
+    best_score = grid_search.best_score_
 
-    }
-
-    grid_search = train_classifier(X,y, classifiers)
+    if config["wandb"]:
+        wandb.init(project="oil-well-cluster-predictor")
+        pipeline_summary = {}        
+        for name, step in clf.named_steps.items():
+            parameters = step.get_params()
+            pipeline_summary[name] = parameters
+        wandb.config.update(pipeline_summary)
+        results = pd.DataFrame(grid_search.cv_results_).filter(regex="^mean_test").iloc[grid_search.best_index_].to_dict()
+        wandb.log(results)
 
 if __name__ == "__main__":
     # Get configuration file path from command line argument

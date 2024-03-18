@@ -4,5 +4,6 @@
     "data_interm_path": "./dataset/interm",
     "train_data_path": "./dataset/interm/train.csv",
     "test_data_path": "./dataset/interm/test.csv",
-    "model_path": "./models/model_bst.pkl"
+    "model_path": "./models/model_bst.pkl",
+    "wandb": true
 }
