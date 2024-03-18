@@ -12,9 +12,6 @@ from data import load_data
 def train_classifier(X,y, classifiers, models_folder = './models'):
 
     for clf_name, clf_config in classifiers.items():
-        params = clf_config.update({'clf_name':clf_name})
-
-        wandb.init(project="oil-well-cluster-predictor",config=params)
         
         pipeline = Pipeline([
             ('data_transformer', CustomDataTransformer()),
@@ -33,8 +30,21 @@ def train_classifier(X,y, classifiers, models_folder = './models'):
         grid_search.fit(X, y)
         best_model = grid_search.best_estimator_
         best_score = grid_search.best_score_
+
+        wandb.init(project="oil-well-cluster-predictor")
+
+        pipeline_summary = {}
+        
+        for name, step in pipeline.named_steps.items():
+            parameters = step.get_params()
+            pipeline_summary[name] = parameters
+        
+        wandb.config.update(pipeline_summary)
+        
         results = pd.DataFrame(grid_search.cv_results_).filter(regex="^mean_test").iloc[grid_search.best_index_].to_dict()
+        
         wandb.log(results)
+        
         print(f"Best parameters for {clf_name}: {best_model}")
         print(f"Best score for {clf_name}: {best_score}")
     #TODO: fix naming
