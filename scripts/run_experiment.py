@@ -74,6 +74,7 @@ def main(config_file):
     X_train, X_val, y_train, y_val = train_test_split(X,y, test_size=.2, stratify=y)
     errors = [f1_score(y_val, y_pred,average='weighted') for y_pred in gbc.staged_predict(preprocess.fit_transform(X_val))]
     bst_n_estimators = np.argmin(errors)
+    print(f"bst_n_estimators: {bst_n_estimators}")
 
     if config["wandb"]:
         wandb.init(project="oil-well-cluster-predictor")
