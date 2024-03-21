@@ -4,6 +4,39 @@ from prophet import Prophet
 from scipy.signal import spectrogram
 pd.set_option('future.no_silent_downcasting', True)
 
+def data_formating(X):
+    exploded = X.explode(['date', 'value'])
+    exploded['date'] = pd.to_datetime(exploded['date'])
+    return exploded
+
+def generate_monthly_data(df,groupby_col, date_col='date'):
+    result_dfs = []
+    for well, data in df.groupby(groupby_col, observed=True):
+        data = data.set_index(date_col)
+        idx = pd.date_range(data.index.min(), data.index.max(), freq='MS')
+        data = data.reindex(idx)
+        data = data.reset_index()
+        data = data.rename(columns={'index':date_col})
+        data[groupby_col] = well
+        result_dfs.append(data)
+    result_df = pd.concat(result_dfs)
+    return result_df
+
+def pad_groups_with_zeros(df, group_col,value_col):
+    well_counts = df[group_col].value_counts()
+    max_samples = well_counts.max()
+    grouped = df.groupby(group_col, observed = True)
+    padded_dfs = []
+    for name, group in grouped:
+        num_samples = len(group)
+        num_zeros_to_pad = max_samples - num_samples
+        zeros_to_pad = pd.DataFrame({group_col: [name] * num_zeros_to_pad, value_col: [0.0] * num_zeros_to_pad})
+        padded_group = pd.concat([group, zeros_to_pad], ignore_index=True)
+        padded_dfs.append(padded_group)
+
+    padded_df = pd.concat(padded_dfs, ignore_index=True)
+    return padded_df
+
 def calculate_well_duration(df):
     """
     Calculate the duration for each well in the provided DataFrame.
