@@ -135,7 +135,7 @@ p  = Pipeline([
 X_transformed = p.fit_transform(X)
 # Plot each time series with its predicted cluster color
 for i in range(4):
-    cluster_data = X_transformed[cluster_labels == i]
+    cluster_data = X_transformed[y == i]
     for ts in cluster_data:
         plt.plot(ts, color=colors[i], alpha=0.5)
 
