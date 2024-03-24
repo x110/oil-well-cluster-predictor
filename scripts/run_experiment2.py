@@ -15,20 +15,15 @@ from sklearn.impute import SimpleImputer
 
 import numpy as np
 
-def adjust_array(arr, m):
-    # Check if reshaping is possible
+def pad_array(arr, m):
     if arr.shape[1] == 500 and arr.shape[0] == m:
         return arr
-    # Trim if larger
     elif arr.shape[1] > 500:
         return arr[:, :500]
-    # Pad if smaller
     else:
         padded_arr = np.zeros((m, 500))
         padded_arr[:arr.shape[0], :arr.shape[1]] = arr
         return padded_arr
-    
-
 class DataFormattingTransformer(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         return self
@@ -56,7 +51,7 @@ class GenerateMonthlyDataTransformer(BaseEstimator, TransformerMixin):
         df = df.pivot(index='well', columns='date', values='value')
         df = df.fillna(0)
         df = df.reindex(sorted(df.columns), axis=1)
-        df = adjust_array(df, df.shape[0])
+        df = pad_array(df, df.shape[0])
         return df
 
 class PadGroupsWithZerosTransformer(BaseEstimator, TransformerMixin):
@@ -134,13 +129,20 @@ p  = Pipeline([
 ])
 X_transformed = p.fit_transform(X)
 # Plot each time series with its predicted cluster color
+label_to_int = {
+    'multi': 0,
+    'normal': 1,
+    'constant': 2,
+    'rapid': 3
+}
+
+yy = y.map(label_to_int)
 for i in range(4):
-    cluster_data = X_transformed[y == i]
-    for ts in cluster_data:
-        plt.plot(ts, color=colors[i], alpha=0.5)
+    cluster_data = X_transformed[yy == i]
+    for ts in cluster_data[:50]:
+        plt.plot(np.diff(ts), color=colors[i], alpha=0.5)
 
 plt.title('Clustering of Time Series Data')
 plt.xlabel('Time')
 plt.ylabel('Value')
-plt.show()
 plt.show()
