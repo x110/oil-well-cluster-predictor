@@ -411,3 +411,24 @@ def calculate_prophet_forecast_wells(df):
 
 def calculate_dc_magnitude_wells(df):
     return df.groupby('well').apply(lambda df_well: calculate_dc_magnitude(df_well)).reset_index(level=0, drop=True)
+
+def pad_array(arr, num_columns):
+    """
+    Pad or trim the input array to have num_columns columns.
+
+    Parameters:
+        arr (numpy.ndarray or pandas dataframe): Input array.
+        num_columns (int): Desired number of columns in the output array.
+
+    Returns:
+        numpy.ndarray: Padded or trimmed array with original number of rows and num_columns columns.
+    """
+    if arr.shape[1] == num_columns:
+        return arr.copy()
+    elif arr.shape[1] > num_columns:
+        return arr[:, :num_columns]
+    else:
+        m = arr.shape[0]
+        padded_arr = np.zeros((m, num_columns))
+        padded_arr[:arr.shape[0], :arr.shape[1]] = arr
+        return padded_arr
