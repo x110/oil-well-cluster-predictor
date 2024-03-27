@@ -20,6 +20,7 @@ def generate_monthly_data(df,groupby_col, date_col='date'):
         data[groupby_col] = well
         result_dfs.append(data)
     result_df = pd.concat(result_dfs)
+    result_df = result_df.reset_index(drop=True)
     return result_df
 
 def pad_groups_with_zeros(df, group_col,value_col):
