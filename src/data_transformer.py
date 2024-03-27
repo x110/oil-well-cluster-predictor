@@ -59,13 +59,14 @@ class DataFormattingTransformer(BaseEstimator, TransformerMixin):
         index = X.well.drop_duplicates().to_list()
         df = data_formating(X)
         df['well'] = pd.Categorical(df['well'], categories=index, ordered=True)
-        df= df.sort_values(by='well')
+        df = df.sort_values(by='well')
         return df
 
 class GenerateMonthlyDataTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self, groupby_col, date_col='date'):
+    def __init__(self, groupby_col, date_col='date', num_cols=500):
         self.groupby_col = groupby_col
         self.date_col = date_col
+        self.num_cols = num_cols
 
     def fit(self, X, y=None):
         return self
@@ -78,27 +79,5 @@ class GenerateMonthlyDataTransformer(BaseEstimator, TransformerMixin):
         df = df.pivot(index='well', columns='date', values='value')
         df = df.fillna(0)
         df = df.reindex(sorted(df.columns), axis=1)
-        df = pad_array(df, df.shape[1])
+        df = pad_array(df, self.num_cols)
         return df
-
-class PadGroupsWithZerosTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self, group_col, value_col):
-        self.group_col = group_col
-        self.value_col = value_col
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        index = X.well.drop_duplicates().to_list()
-        df = pad_groups_with_zeros(X, self.group_col, self.value_col)
-        df['well'] = pd.Categorical(df['well'], categories=index, ordered=True)
-        df= df.sort_values(by='well')
-
-        df = df.drop_duplicates()
-        df = df.pivot(index='well', columns='date', values='value')
-        df = df.reindex(sorted(df.columns), axis=1)
-        df.head()
-        return df
-
-
