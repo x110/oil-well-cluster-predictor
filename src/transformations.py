@@ -433,3 +433,9 @@ def pad_array(arr, num_columns):
         padded_arr = np.zeros((m, num_columns))
         padded_arr[:arr.shape[0], :arr.shape[1]] = arr
         return padded_arr
+
+def undo_data_formatting(df):
+    df = df.sort_values(by=['well', 'date'])
+    df = df.pivot(index='well', columns='date', values='value')
+    df = df.reindex(sorted(df.columns), axis=1)
+    return df

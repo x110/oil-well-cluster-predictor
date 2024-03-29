@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 import transformations as tf
 from sklearn.base import BaseEstimator, TransformerMixin
-from transformations import data_formating, generate_monthly_data, pad_groups_with_zeros, pad_array
+from transformations import data_formating, generate_monthly_data, pad_groups_with_zeros, pad_array, undo_data_formatting
 class CustomDataTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, years=5, window=6):
         self.years = years
@@ -63,10 +63,9 @@ class DataFormattingTransformer(BaseEstimator, TransformerMixin):
         return df
 
 class GenerateMonthlyDataTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self, groupby_col, date_col='date', num_cols=500):
+    def __init__(self, groupby_col, date_col='date'):
         self.groupby_col = groupby_col
         self.date_col = date_col
-        self.num_cols = num_cols
 
     def fit(self, X, y=None):
         return self
@@ -75,9 +74,34 @@ class GenerateMonthlyDataTransformer(BaseEstimator, TransformerMixin):
         index = X.well.drop_duplicates().to_list()
         df = generate_monthly_data(X, self.groupby_col, self.date_col)
         df['well'] = pd.Categorical(df['well'], categories=index, ordered=True)
-        df = df.sort_values(by=['well', 'date'])
-        df = df.pivot(index='well', columns='date', values='value')
-        df = df.fillna(0)
-        df = df.reindex(sorted(df.columns), axis=1)
-        df = pad_array(df, self.num_cols)
+        df = df.sort_values(by='well')
+        df['well'] = df['well'].astype('object')
+        return df
+class Imputer(TransformerMixin):
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        X = X.fillna(0)
+        return X
+    
+
+    
+class PadArrayTransformer(BaseEstimator, TransformerMixin):
+    def __init__(self, num_cols=500):
+        self.num_cols = num_cols
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        df = pad_array(X, self.num_cols)
+        return df
+
+class UndoDataFormattingTransformer(TransformerMixin):
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        df = undo_data_formatting(X)
         return df

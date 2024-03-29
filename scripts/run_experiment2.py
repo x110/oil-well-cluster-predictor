@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler, KBinsDiscretizer
 import sys
 sys.path.append('./src')
 from data import load_data
-from data_transformer import DataFormattingTransformer, GenerateMonthlyDataTransformer
+from data_transformer import DataFormattingTransformer, GenerateMonthlyDataTransformer, Imputer, UndoDataFormattingTransformer, PadArrayTransformer
 
 config_file = "./config.json"
 with open(config_file, 'r') as f:
@@ -24,6 +24,9 @@ y = df.cluster
 clf = Pipeline([
     ('data_formatting', DataFormattingTransformer()),
     ('monthly_data_generation', GenerateMonthlyDataTransformer(groupby_col='well')),
+    ('undo_data_formatting', UndoDataFormattingTransformer()),
+    ('simple_imputer',Imputer()),
+    ('pad_array',PadArrayTransformer(num_cols=500)),
     ('preprocessor', StandardScaler()),
     ("kmeans", KMeans())
 ])
